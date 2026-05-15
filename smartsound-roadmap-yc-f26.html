@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Sound — YC F26 Roadmap</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300;400;500&display=swap');
+
+:root {
+  --bg: #f5f2ec;
+  --ink: #1a1714;
+  --muted: #7a7570;
+  --surface: #edeae3;
+  --border: #d8d3ca;
+  --accent: #c8440a;
+  --accent2: #1a6b3c;
+  --accent3: #1a3a6b;
+  --warn: #b8860b;
+  --phase1: #c8440a;
+  --phase2: #1a6b3c;
+  --phase3: #1a3a6b;
+  --phase4: #6b1a5a;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Geist Mono', monospace;
+  font-size: 14px;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* NOISE TEXTURE */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page { position: relative; z-index: 1; }
+
+/* HEADER */
+.masthead {
+  border-bottom: 2px solid var(--ink);
+  padding: 48px 64px 40px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 32px;
+}
+
+.masthead-left {}
+
+.eyebrow {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.masthead h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.masthead h1 span {
+  color: var(--accent);
+}
+
+.masthead-meta {
+  text-align: right;
+}
+
+.meta-item {
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 2;
+}
+
+.meta-item strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* PRODUCT BRIEF */
+.brief {
+  border-bottom: 1px solid var(--border);
+  padding: 40px 64px;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.brief-label {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-top: 4px;
+}
+
+.brief-content {}
+
+.brief-headline {
+  font-family: 'Instrument Serif', serif;
+  font-size: 24px;
+  line-height: 1.4;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+
+.brief-headline em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.brief-body {
+  font-size: 13px;
+  color: #4a4540;
+  line-height: 1.75;
+  max-width: 680px;
+}
+
+/* PRINCIPLE STRIP */
+.principle-strip {
+  border-bottom: 1px solid var(--border);
+  padding: 24px 64px;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+}
+
+.principle {
+  flex: 1;
+  min-width: 160px;
+  padding: 0 24px 0 0;
+  border-right: 1px solid var(--border);
+  margin-right: 24px;
+}
+
+.principle:last-child { border-right: none; margin-right: 0; }
+
+.principle-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.principle-label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.principle-desc {
+  font-size: 12px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+/* NAV */
+.phase-nav {
+  border-bottom: 2px solid var(--ink);
+  padding: 0 64px;
+  display: flex;
+  gap: 0;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 100;
+}
+
+.nav-item {
+  padding: 14px 20px;
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  border-right: 1px solid var(--border);
+  transition: color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+
+.nav-item:last-child { border-right: none; }
+.nav-item:hover { color: var(--ink); background: var(--surface); }
+.nav-item.p1 { border-top: 3px solid var(--phase1); }
+.nav-item.p2 { border-top: 3px solid var(--phase2); }
+.nav-item.p3 { border-top: 3px solid var(--phase3); }
+.nav-item.p4 { border-top: 3px solid var(--phase4); }
+
+/* PHASE SECTIONS */
+.phase {
+  border-bottom: 2px solid var(--ink);
+}
+
+.phase-header {
+  padding: 40px 64px 32px;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 32px;
+}
+
+.phase-tag {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.phase-header h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.phase-goal {
+  margin-top: 12px;
+  font-family: 'Instrument Serif', serif;
+  font-size: 18px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.phase-timeline {
+  text-align: right;
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 2;
+}
+
+.phase-body {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: none;
+}
+
+.col {
+  padding: 32px 40px;
+  border-right: 1px solid var(--border);
+}
+
+.col:last-child { border-right: none; }
+
+.col-label {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.item {
+  margin-bottom: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px dashed var(--border);
+}
+
+.item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+.item-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.item-body {
+  font-size: 12px;
+  color: #5a5550;
+  line-height: 1.6;
+}
+
+/* TRIGGER BOX */
+.trigger-box {
+  margin: 0 64px 32px;
+  border: 1px solid var(--border);
+  border-left: 4px solid;
+  border-radius: 4px;
+  padding: 20px 24px;
+  background: var(--surface);
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 24px;
+  align-items: center;
+}
+
+.trigger-label {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.trigger-condition {
+  font-family: 'Instrument Serif', serif;
+  font-size: 16px;
+  color: var(--ink);
+  font-style: italic;
+}
+
+/* METRIC ROW */
+.metric-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin: 0 0;
+}
+
+.metric {
+  padding: 24px 40px;
+  border-right: 1px solid var(--border);
+}
+
+.metric:last-child { border-right: none; }
+
+.metric-val {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.metric-name {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* WEEKLY LOOP */
+.loop-section {
+  padding: 40px 64px;
+  border-bottom: 1px solid var(--border);
+}
+
+.loop-title {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.loop-steps {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+
+.loop-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.step-box {
+  background: var(--ink);
+  color: var(--bg);
+  padding: 10px 16px;
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.step-arrow {
+  font-size: 18px;
+  color: var(--muted);
+  padding: 0 4px;
+}
+
+/* WARNINGS */
+.warning-strip {
+  background: #fdf8f0;
+  border-top: 2px solid var(--warn);
+  padding: 32px 64px;
+}
+
+.warning-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--warn);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.warnings {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.warn-item {
+  padding: 16px 20px;
+  border: 1px solid #e8dcc0;
+  border-left: 3px solid var(--warn);
+  border-radius: 4px;
+  background: white;
+}
+
+.warn-item-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--warn);
+  margin-bottom: 6px;
+}
+
+.warn-item-body {
+  font-size: 12px;
+  color: #6a6050;
+  line-height: 1.6;
+}
+
+/* APPLICATION CHECKLIST */
+.checklist-section {
+  padding: 40px 64px;
+  border-bottom: 1px solid var(--border);
+}
+
+.checklist-title {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.checklist {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.check-box {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border);
+  border-radius: 3px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.check-text {
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.check-text strong { font-weight: 600; }
+
+/* FOOTER */
+footer {
+  border-top: 2px solid var(--ink);
+  padding: 28px 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-brand {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.footer-brand span { color: var(--accent); }
+
+.footer-meta {
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* COLOR OVERRIDES PER PHASE */
+.p1-color { color: var(--phase1); }
+.p2-color { color: var(--phase2); }
+.p3-color { color: var(--phase3); }
+.p4-color { color: var(--phase4); }
+
+.p1-border { border-left-color: var(--phase1) !important; }
+.p2-border { border-left-color: var(--phase2) !important; }
+.p3-border { border-left-color: var(--phase3) !important; }
+.p4-border { border-left-color: var(--phase4) !important; }
+
+.p1-metric { color: var(--phase1); }
+.p2-metric { color: var(--phase2); }
+.p3-metric { color: var(--phase3); }
+.p4-metric { color: var(--phase4); }
+
+/* FADE IN */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.masthead, .brief, .principle-strip { animation: fadeUp 0.5s ease both; }
+.phase:nth-child(1) { animation: fadeUp 0.5s 0.1s ease both; }
+.phase:nth-child(2) { animation: fadeUp 0.5s 0.2s ease both; }
+
+@media (max-width: 900px) {
+  .masthead, .brief, .principle-strip, .phase-header, .checklist-section,
+  .loop-section, .warning-strip { padding: 28px 24px; }
+  .phase-nav { padding: 0 24px; }
+  .masthead h1 { font-size: 36px; }
+  .phase-body { grid-template-columns: 1fr; }
+  .col { border-right: none; border-bottom: 1px solid var(--border); }
+  .brief { grid-template-columns: 1fr; gap: 16px; }
+  .metric-row { grid-template-columns: repeat(2, 1fr); }
+  .warnings { grid-template-columns: 1fr; }
+  .checklist { grid-template-columns: 1fr; }
+  .trigger-box { grid-template-columns: 1fr; gap: 8px; margin: 0 24px 24px; }
+  .loop-steps { gap: 4px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-left">
+    <div class="eyebrow">Startup Roadmap · Confidential · Rebuilt May 2026</div>
+    <h1>SMART<br><span>SOUND</span><br>YC F26</h1>
+  </div>
+  <div class="masthead-meta">
+    <div class="meta-item"><strong>Application Deadline</strong><br>~Dec 2026</div>
+    <div class="meta-item" style="margin-top:12px"><strong>Stage</strong><br>Pre-seed · Beta</div>
+    <div class="meta-item" style="margin-top:12px"><strong>Target</strong><br>YC F26 Batch</div>
+  </div>
+</div>
+
+<!-- PRODUCT BRIEF -->
+<div class="brief">
+  <div class="brief-label">What Smart Sound Is</div>
+  <div class="brief-content">
+    <div class="brief-headline">
+      Smart Sound is an <em>adaptive audio engine</em> that reads your cognitive state in real time — via Apple Watch, WHOOP, and Oura Ring — and dynamically reshapes your sound environment to keep you in deep focus.
+    </div>
+    <div class="brief-body">
+      Unlike Spotify focus playlists or Brain.fm's static sessions, Smart Sound builds a closed-loop system: biometric signals (HRV, stress, movement) flow into an adaptive engine that modulates binaural beats, soundscape layers, and audio transitions in real time. The result is a listening environment that changes as your brain does — extending deep work, reducing cognitive fatigue, and learning your patterns over time. Built at the intersection of neuroscience, AI, and HCI. Early traction with students and knowledge workers. Accelerator-backed. High school founders.
+    </div>
+  </div>
+</div>
+
+<!-- PRINCIPLES -->
+<div class="principle-strip">
+  <div class="principle">
+    <div class="principle-num">01</div>
+    <div class="principle-label">North Star</div>
+    <div class="principle-desc">Every week, answer one question that makes the YC application stronger.</div>
+  </div>
+  <div class="principle">
+    <div class="principle-num">02</div>
+    <div class="principle-label">Retention First</div>
+    <div class="principle-desc">No new feature ships until it demonstrably improves D7 retention.</div>
+  </div>
+  <div class="principle">
+    <div class="principle-num">03</div>
+    <div class="principle-label">Talk to Users</div>
+    <div class="principle-desc">Minimum 10 user conversations per month, every month, logged.</div>
+  </div>
+  <div class="principle">
+    <div class="principle-num">04</div>
+    <div class="principle-label">Growth Rate</div>
+    <div class="principle-desc">YC cares about the slope, not the absolute number. Track WoW growth always.</div>
+  </div>
+  <div class="principle">
+    <div class="principle-num">05</div>
+    <div class="principle-label">Roles Clear</div>
+    <div class="principle-desc">One founder owns product/tech. One owns users/growth. No blurring.</div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="phase-nav">
+  <a href="#phase1" class="nav-item p1">Phase 1 — May–Jun</a>
+  <a href="#phase2" class="nav-item p2">Phase 2 — Jul–Aug</a>
+  <a href="#phase3" class="nav-item p3">Phase 3 — Sep–Nov</a>
+  <a href="#phase4" class="nav-item p4">Phase 4 — Dec</a>
+</nav>
+
+<!-- WEEKLY EXECUTION LOOP (always visible) -->
+<div class="loop-section">
+  <div class="loop-title">The Execution Loop — run every single week</div>
+  <div class="loop-steps">
+    <div class="loop-step">
+      <div class="step-box">Draft YC app field</div>
+      <div class="step-arrow">→</div>
+    </div>
+    <div class="loop-step">
+      <div class="step-box">Identify metric gap</div>
+      <div class="step-arrow">→</div>
+    </div>
+    <div class="loop-step">
+      <div class="step-box">Build smallest fix</div>
+      <div class="step-arrow">→</div>
+    </div>
+    <div class="loop-step">
+      <div class="step-box">Talk to 3 users</div>
+      <div class="step-arrow">→</div>
+    </div>
+    <div class="loop-step">
+      <div class="step-box">Ship &amp; measure</div>
+      <div class="step-arrow">→</div>
+    </div>
+    <div class="loop-step">
+      <div class="step-box">Update YC app</div>
+      <div class="step-arrow">↺</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ PHASE 1 ═══════════════════════════ -->
+<section class="phase" id="phase1">
+  <div class="phase-header">
+    <div>
+      <div class="phase-tag p1-color">◆ Phase 1</div>
+      <h2>Prove <span class="p1-color">Love</span></h2>
+      <div class="phase-goal">Build something people use without being reminded.</div>
+    </div>
+    <div class="phase-timeline">
+      <strong>May – June 2026</strong><br>
+      8 weeks<br>
+      Foundation sprint
+    </div>
+  </div>
+
+  <!-- WEEK 1 MANDATE -->
+  <div class="trigger-box p1-border" style="margin-top:32px;">
+    <div class="trigger-label">Week 1 mandate<br>(do this first)</div>
+    <div class="trigger-condition">Write the full YC application today — every field — as if submitting it right now. Every blank reveals a gap. That document is your real roadmap.</div>
+  </div>
+
+  <div class="phase-body">
+    <div class="col">
+      <div class="col-label">Product</div>
+
+      <div class="item">
+        <div class="item-title">Define the one-sentence product</div>
+        <div class="item-body">Before writing one line of code: "Smart Sound uses biometric data from Apple Watch/WHOOP/Oura to dynamically adjust binaural beats and soundscapes so your focus audio adapts to your cognitive state in real time." Every team member must be able to say this cold.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Embarrassingly simple adaptive engine v0</div>
+        <div class="item-body">Rule-based, not ML. If HRV drops → shift to lower-tempo layer. If motion detected → pause binaural. Prove the loop works before adding intelligence. Complexity comes after love.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">One wearable, one integration</div>
+        <div class="item-body">Apple Watch only. Not WHOOP, not Oura — not yet. Nail one before adding more. Wearable APIs are finicky. A broken integration signals you don't know what to prioritize.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">3 focus modes, not 5</div>
+        <div class="item-body">Deep Work · Study · Wind Down. Each with a distinct soundscape. Onboarding in under 60 seconds. Do not add modes until existing ones show retention.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Session analytics (internal)</div>
+        <div class="item-body">Log every session: duration, mode, device, retention event (did they come back?). This is your most important infrastructure. Build it week 1.</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="col-label">Users &amp; Distribution</div>
+
+      <div class="item">
+        <div class="item-title">Target: 150 active beta users by June 30</div>
+        <div class="item-body">Not 300–500. 150 real users you know by name who give you feedback is worth more than 500 strangers who opened the app once. Reachable, specific, accountable.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Acquisition: campus-first</div>
+        <div class="item-body">Go to one college campus with a printed flyer and a QR code. Post in 3 study-focused subreddits (r/getdisciplined, r/studytips, r/productivity). DM 20 student creators. This beats four social platforms maintained half-heartedly.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">User interviews: 10/month minimum</div>
+        <div class="item-body">30-minute calls. Record them. Ask: "What were you doing the last time you used Smart Sound?" Not "do you like it?" Log every session. These conversations are your product roadmap.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">One content channel, done well</div>
+        <div class="item-body">Choose TikTok OR LinkedIn — not both. Post 3x/week only. Only post when you have something real to show: a user testimonial, a data point, a demo. No content before traction exists.</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="col-label">Founder Clarity</div>
+
+      <div class="item">
+        <div class="item-title">Define co-founder roles publicly</div>
+        <div class="item-body">YC will ask: who is technical and who talks to users? Answer this now, in writing. One founder owns product/tech (builds the engine). One owns growth/users (does the interviews, runs the campus outreach). No blurring.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Answer founder-market fit</div>
+        <div class="item-body">Why are YOU the right people to build adaptive audio? Not just "we're passionate." What unique insight do you have about cognition, sound, or user behavior that others don't? Write one paragraph. This goes in the YC app.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Write the competitive answer</div>
+        <div class="item-body">Why won't Spotify, Calm, or Brain.fm copy this? Answer: personalization data moat. Every session generates labeled cognitive-state→audio-response pairs no competitor has. Write this crisply. Practice saying it in 30 seconds.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Define phase exit metrics</div>
+        <div class="item-body">You leave Phase 1 when: 100+ users with ≥3 sessions each, D7 retention ≥25%, and you can articulate one specific insight from user interviews that changed the product.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="metric-row">
+    <div class="metric">
+      <div class="metric-val p1-metric">150</div>
+      <div class="metric-name">Named beta users</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val p1-metric">25%</div>
+      <div class="metric-name">D7 retention target</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val p1-metric">3+</div>
+      <div class="metric-name">Sessions per user</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val p1-metric">10</div>
+      <div class="metric-name">User interviews/month</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ PHASE 2 ═══════════════════════════ -->
+<section class="phase" id="phase2">
+  <div class="phase-header">
+    <div>
+      <div class="phase-tag p2-color">◆ Phase 2</div>
+      <h2>Find <span class="p2-color">Pull</span></h2>
+      <div class="phase-goal">Users return without reminders. Growth becomes organic.</div>
+    </div>
+    <div class="phase-timeline">
+      <strong>July – August 2026</strong><br>
+      8 weeks<br>
+      Retention sprint
+    </div>
+  </div>
+
+  <div class="trigger-box p2-border" style="margin-top:32px;">
+    <div class="trigger-label">Phase unlock<br>(don't start until)</div>
+    <div class="trigger-condition">Phase 1 exit metrics are hit: 100 users with 3+ sessions, D7 retention ≥25%, and one product change driven by a real user interview insight.</div>
+  </div>
+
+  <div class="phase-body">
+    <div class="col">
+      <div class="col-label">Product</div>
+
+      <div class="item">
+        <div class="item-title">Upgrade adaptive engine to ML v1</div>
+        <div class="item-body">Only now — after proving rule-based system users love. Move from rule-based to a simple model trained on your session data. Input: HRV trend + session duration + time of day. Output: soundscape layer weight adjustments. Start simple.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Personalization profiles</div>
+        <div class="item-body">After 5 sessions, the app builds a baseline cognitive profile. Users see: "Your peak focus window is 2–4pm. You perform 22% better with low-tempo binaural." This is the sticky, defensible feature Spotify can't copy.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Focus score + session history</div>
+        <div class="item-body">Simple dashboard: today's focus score, weekly trend, best sessions. This creates a habit loop and gives users a reason to return daily even when not actively working.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Add WHOOP integration</div>
+        <div class="item-body">Only after Apple Watch is stable and users are retained. Second wearable signals technical progress to YC. Pick WHOOP because it skews toward high-performance knowledge workers — your secondary audience.</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="col-label">Growth</div>
+
+      <div class="item">
+        <div class="item-title">Target: 500 users, 30% WoW growth</div>
+        <div class="item-body">The absolute number matters less than the growth rate. Going from 150 → 500 over 8 weeks at consistent WoW growth is a powerful YC signal. Track the slope every Monday.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Explore partnerships over ads</div>
+        <div class="item-body">Email Forest app, Notion, and Focusmate. Propose an integration or co-marketing. One partnership email to an existing productivity app with 100K users is worth months of TikTok posts. Low cost, high upside.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Collect and document testimonials</div>
+        <div class="item-body">Every strong testimonial gets a short video or screenshot. Build a Notion page of social proof. "I wrote my entire thesis in 3 sessions with Smart Sound" is more powerful than any metric to a YC reader.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Research partnership (optional but high upside)</div>
+        <div class="item-body">Email one neuroscience or cognitive science professor about a research collaboration. You don't need them to say yes — you need to have sent the email and have a story. If they say yes, that's a massive YC signal.</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="col-label">Narrative Building</div>
+
+      <div class="item">
+        <div class="item-title">Develop the real insight</div>
+        <div class="item-body">By now you have data. Find the specific, surprising thing you learned. Example: "Users who receive audio transitions during cognitive load spikes sustain focus sessions 40% longer than those with static playlists." That's an insight, not an observation. It goes in your YC app.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Frame the data moat</div>
+        <div class="item-body">Start saying this: "We're building the largest labeled dataset of cognitive states mapped to adaptive audio response. After 6 months, no competitor can replicate our personalization model." This is your "why won't Spotify copy you" answer.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Start content — now, not before</div>
+        <div class="item-body">Now you have real data and testimonials. "We tested adaptive audio on 300 students — here's what happened." This content works because it's real. Same content posted in Phase 1 (before data exists) looks like performance.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="metric-row">
+    <div class="metric">
+      <div class="metric-val p2-metric">500</div>
+      <div class="metric-name">Total users</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val p2-metric">30%</div>
+      <div class="metric-name">WoW growth rate</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val p2-metric">40%</div>
+      <div class="metric-name">D7 retention target</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val p2-metric">1</div>
+      <div class="metric-name">Validated core insight</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ PHASE 3 ═══════════════════════════ -->
+<section class="phase" id="phase3">
+  <div class="phase-header">
+    <div>
+      <div class="phase-tag p3-color">◆ Phase 3</div>
+      <h2>Build the <span class="p3-color">Moat</span></h2>
+      <div class="phase-goal">Become technically defensible. Answer every hard YC question.</div>
+    </div>
+    <div class="phase-timeline">
+      <strong>September – November 2026</strong><br>
+      12 weeks<br>
+      Differentiation sprint
+    </div>
+  </div>
+
+  <div class="trigger-box p3-border" style="margin-top:32px;">
+    <div class="trigger-label">Phase unlock<br>(don't start until)</div>
+    <div class="trigger-condition">500+ users, consistent WoW growth for 4+ weeks, D7 retention ≥35%, and you can answer "why won't Spotify copy you?" in one sentence without hesitation.</div>
+  </div>
+
+  <div class="phase-body">
+    <div class="col">
+      <div class="col-label">Technical Depth</div>
+
+      <div class="item">
+        <div class="item-title">Closed-loop v1</div>
+        <div class="item-body">The full vision, delivered: biometric signal → adaptive engine → real-time audio modulation → behavioral response logging → model update. Even a basic version of this working loop is a massive technical differentiator. Demo it cleanly.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Proprietary dataset milestone</div>
+        <div class="item-body">Document: "X sessions logged, Y unique users, Z hours of labeled cognitive-state audio data." This is intellectual property. Frame it as such. It's the thing that makes Smart Sound acquirable and fundable at scale.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Platform API concept</div>
+        <div class="item-body">Don't build it — sketch it. A Smart Sound SDK that other productivity apps (Notion, Linear, Forest) could embed. Shows YC you've thought about scale beyond a consumer app. Even a one-pager is enough.</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="col-label">Hard Questions — answered</div>
+
+      <div class="item">
+        <div class="item-title">Why now?</div>
+        <div class="item-body">Consumer wearables hit critical mass in 2024–25. 40M+ Apple Watch users. HRV APIs became accessible. The data to power a closed-loop cognitive audio system now exists in consumers' pockets. This wasn't possible 3 years ago.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Why you?</div>
+        <div class="item-body">Write this paragraph. It should contain: a specific personal experience with the problem, unique technical insight from building the system, and evidence from your user research no one else has. Practice it until it's effortless.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Why won't Spotify/Calm copy you?</div>
+        <div class="item-body">Two reasons: (1) they don't have biometric integration infrastructure — it's not in their roadmap, (2) personalization requires a dataset they don't have and can't acquire without years of labeled cognitive-state sessions. Your data moat is the answer.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Are users addicted?</div>
+        <div class="item-body">By now your answer should be: retention rate, average sessions per week, and one testimonial of a user who was upset when the app broke. If you don't have this, it's the only thing to work on.</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="col-label">Team &amp; Credibility</div>
+
+      <div class="item">
+        <div class="item-title">Formalize 1–2 technical contributors</div>
+        <div class="item-body">Not advisors with logos. Actual builders: someone doing ML engineering, someone doing signal processing. Even part-time. YC will probe technical depth hard given the complexity of the system you're describing.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Target 1,500–2,000 users</div>
+        <div class="item-body">Not 2,000 signups. 2,000 users who have each completed 3+ sessions. The quality of this number matters enormously. One line in the YC app: "1,800 active users, 42% D7 retention, 3.4 sessions/week average."</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Pursue one credibility signal</div>
+        <div class="item-body">In order of impact: (1) paid user or institution (even $100), (2) university research partnership announcement, (3) press mention in a productivity or neuroscience publication. You need at least one of these before applying.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Contingency plan</div>
+        <div class="item-body">If retention is below target at end of October: do not paper over it. Diagnose it. Run 20 exit interviews with churned users. Solve it or pivot the core mechanic. A startup that identifies and fixes its own weakness is more fundable than one that hides it.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="metric-row">
+    <div class="metric">
+      <div class="metric-val p3-metric">1,800</div>
+      <div class="metric-name">Active users (3+ sessions)</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val p3-metric">42%</div>
+      <div class="metric-name">D7 retention target</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val p3-metric">3.4×</div>
+      <div class="metric-name">Avg sessions/week</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val p3-metric">1</div>
+      <div class="metric-name">Paid signal or research partner</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ PHASE 4 ═══════════════════════════ -->
+<section class="phase" id="phase4">
+  <div class="phase-header">
+    <div>
+      <div class="phase-tag p4-color">◆ Phase 4</div>
+      <h2>Package <span class="p4-color">Momentum</span></h2>
+      <div class="phase-goal">Tell the story so undeniably that YC can't say no.</div>
+    </div>
+    <div class="phase-timeline">
+      <strong>December 2026</strong><br>
+      4 weeks<br>
+      Application sprint
+    </div>
+  </div>
+
+  <div class="trigger-box p4-border" style="margin-top:32px;">
+    <div class="trigger-label">Application mindset</div>
+    <div class="trigger-condition">You've been writing this application since Week 1. December is not when you start — it's when you finalize. Every gap you fill now is a week too late.</div>
+  </div>
+
+  <div class="phase-body">
+    <div class="col">
+      <div class="col-label">Application Components</div>
+
+      <div class="item">
+        <div class="item-title">One-line description (critical)</div>
+        <div class="item-body">"Smart Sound uses real-time biometric data from wearables to dynamically adapt your focus audio — so your sound environment responds to your cognitive state the way Spotify never can." Test this on 5 people who've never heard of you. If they don't immediately get it, rewrite.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Traction section</div>
+        <div class="item-body">Lead with growth rate, not absolute number. "Grew from 150 → 1,800 active users over 7 months. D7 retention 42%. Average 3.4 sessions/week. Organic referral rate of X%." Then layer in the testimonials.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Demo video</div>
+        <div class="item-body">90 seconds. No slides. Show: (1) biometric reading live from Apple Watch, (2) audio shifting in real time as the signal changes, (3) session summary with focus score. If the demo isn't viscerally impressive, that's a product problem to solve in November.</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="col-label">Story Structure</div>
+
+      <div class="item">
+        <div class="item-title">The insight, not the observation</div>
+        <div class="item-body">Don't write "focus playlists are static." Write: "After 18,000 logged sessions, we found that users who receive adaptive audio transitions during cognitive load spikes sustain deep focus 40% longer. Static playlists can't do this by definition."</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Founder story — specific, not generic</div>
+        <div class="item-body">The high school founders angle works if it's specific. Not "we're passionate about productivity." Instead: the exact moment, experiment, or experience that proved to you this problem was real and solvable. Specificity = credibility.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">The "why now" answer</div>
+        <div class="item-body">Consumer wearable adoption crossed a threshold. HRV API access became reliable. Real-time audio synthesis is now computationally affordable on mobile. Three converging trends made 2026 the year this becomes possible at scale.</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="col-label">Final Checks</div>
+
+      <div class="item">
+        <div class="item-title">The stranger test</div>
+        <div class="item-body">Give your complete application to someone who has never heard of Smart Sound. Give them 5 minutes. Ask: "What does this company do? Who uses it? Why would it win?" If they can't answer all three, revise.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">The skeptic test</div>
+        <div class="item-body">Find the most skeptical person you know. Ask them to spend 10 minutes finding holes in your application. Every objection they raise is a YC partner objection you need to pre-empt in the application or be ready to answer in the interview.</div>
+      </div>
+
+      <div class="item">
+        <div class="item-title">Interview prep — 3 hard questions</div>
+        <div class="item-body">(1) "Why won't Apple build this into the Watch natively?" (2) "What happens to your moat if users switch wearables?" (3) "You're in high school — convince me you can build an ML audio system." Practice until the answers are instant and confident.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="metric-row">
+    <div class="metric">
+      <div class="metric-val p4-metric">1-line</div>
+      <div class="metric-name">Product description passes stranger test</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val p4-metric">90s</div>
+      <div class="metric-name">Demo that closes itself</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val p4-metric">3</div>
+      <div class="metric-name">Hard Qs answered cold</div>
+    </div>
+    <div class="metric">
+      <div class="metric-val p4-metric">0</div>
+      <div class="metric-name">Blanks in the application</div>
+    </div>
+  </div>
+</section>
+
+<!-- ANTI-PATTERNS -->
+<div class="warning-strip">
+  <div class="warning-title">⚠ Anti-Patterns — things that will kill YC odds</div>
+  <div class="warnings">
+    <div class="warn-item">
+      <div class="warn-item-title">Content before traction</div>
+      <div class="warn-item-body">Posting "building in public" before you have real data reads as performance to sophisticated YC readers. Start content in Phase 2 — after you have numbers worth sharing.</div>
+    </div>
+    <div class="warn-item">
+      <div class="warn-item-title">Four social platforms</div>
+      <div class="warn-item-body">Maintaining TikTok + LinkedIn + Instagram + Twitter while building a complex biometric product is not possible at this team size. One platform, done well, beats four done poorly.</div>
+    </div>
+    <div class="warn-item">
+      <div class="warn-item-title">Wearables before retention</div>
+      <div class="warn-item-body">A half-working WHOOP integration is worse than no WHOOP integration. It signals poor prioritization. Add each wearable only after the previous one is stable and users are retained.</div>
+    </div>
+    <div class="warn-item">
+      <div class="warn-item-title">Undefined "adaptive"</div>
+      <div class="warn-item-body">Every sentence in your application that says "adaptive" must be followed immediately by "based on X signal, the system adjusts Y in real time." Never let the word stand alone.</div>
+    </div>
+    <div class="warn-item">
+      <div class="warn-item-title">Bloated team / fake titles</div>
+      <div class="warn-item-body">Two founders with clear roles beats six founders with VP titles. Every person on the team needs a job only they can do. Advisors with logos but no active contribution hurt more than they help.</div>
+    </div>
+    <div class="warn-item">
+      <div class="warn-item-title">Treating application as Phase 4 work</div>
+      <div class="warn-item-body">The YC application is written in Week 1 and updated every week. By December you're finalizing, not starting. If you begin the application in December, you've already lost.</div>
+    </div>
+  </div>
+</div>
+
+<!-- YC APPLICATION CHECKLIST -->
+<div class="checklist-section">
+  <div class="checklist-title">YC Application Readiness Checklist — all boxes checked before submitting</div>
+  <div class="checklist">
+    <div class="check-item">
+      <div class="check-box"></div>
+      <div class="check-text"><strong>One-line description</strong> passes the stranger test (5/5 strangers understand it)</div>
+    </div>
+    <div class="check-item">
+      <div class="check-box"></div>
+      <div class="check-text"><strong>Traction section</strong> leads with growth rate, not absolute user count</div>
+    </div>
+    <div class="check-item">
+      <div class="check-box"></div>
+      <div class="check-text"><strong>Founder-market fit</strong> paragraph written: why these founders, specifically, for this problem</div>
+    </div>
+    <div class="check-item">
+      <div class="check-box"></div>
+      <div class="check-text"><strong>Co-founder roles</strong> explicitly stated: who is technical, who owns users/growth</div>
+    </div>
+    <div class="check-item">
+      <div class="check-box"></div>
+      <div class="check-text"><strong>Competitive moat</strong> answer written without using the word "better" or "unique"</div>
+    </div>
+    <div class="check-item">
+      <div class="check-box"></div>
+      <div class="check-text"><strong>Demo video</strong> shows live biometric → adaptive audio loop in under 90 seconds</div>
+    </div>
+    <div class="check-item">
+      <div class="check-box"></div>
+      <div class="check-text"><strong>Core insight</strong> is a specific finding from your data, not a general observation</div>
+    </div>
+    <div class="check-item">
+      <div class="check-box"></div>
+      <div class="check-text"><strong>Why now</strong> names three specific technological/market shifts that make 2026 the right moment</div>
+    </div>
+    <div class="check-item">
+      <div class="check-box"></div>
+      <div class="check-text"><strong>Retention metrics</strong> shown as a chart, not a single number</div>
+    </div>
+    <div class="check-item">
+      <div class="check-box"></div>
+      <div class="check-text"><strong>One credibility signal</strong> beyond pitch wins: paying user, institution, or research partner</div>
+    </div>
+    <div class="check-item">
+      <div class="check-box"></div>
+      <div class="check-text"><strong>Skeptic test</strong> passed: reviewed by someone trying to break it</div>
+    </div>
+    <div class="check-item">
+      <div class="check-box"></div>
+      <div class="check-text"><strong>Three hard questions</strong> answered cold in under 30 seconds each</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand">SMART <span>SOUND</span></div>
+  <div class="footer-meta">YC F26 Roadmap · Rebuilt May 14, 2026 · Confidential</div>
+</footer>
+
+</div>
+</body>
+</html>
